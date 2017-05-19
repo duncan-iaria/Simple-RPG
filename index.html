@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple RPG</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style-modal.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script type="text/javascript" src="assets/js/data.js"></script>
+	<script type="text/javascript" src="assets/js/modal.js"></script>
+	<script type="text/javascript" src="assets/js/game.js"></script>
+</head>
+<body>
+	<!-- MODAL -->
+	<section id="modal-bg-id" class="modal-bg">
+		<div id="modal-id" class="modal">
+			<div class="modal-label-container">
+				<h1 id="modal-label">Ready to Play?</h1>
+				<hr/>
+			</div>
+
+			<div class="modal-img-container">
+				<img id="modal-img" src="assets/images/0.jpg"/>
+			</div>
+
+			<div class="modal-text-container">
+				<p id="modal-text">Press any key to guess a letter</p>
+			</div>
+			<button id="modal-no" class="modal-btn btn-no">Scared</button>
+			<button id="modal-yes" class="modal-btn btn-yes">Ready</button>
+		</div>
+	</section>
+	<!-- END MODAL -->
+
+<!-- 	<div class="unit-container">
+		<img class="unit-image" src="assets/images/0.jpg"/>
+		<div class="unit-stats-container">
+			<div class="unit-health"><p>50</p></div>
+		</div>
+		<div class="unit-name">Jar Jar</div>
+	</div>
+
+	<div class="unit-container">
+		<img class="unit-image" src="assets/images/1.jpg"/>
+		<div class="unit-stats-container">
+			<div class="unit-health"><p>100</p></div>
+		</div>
+		<div class="unit-name">Greedo</div>
+	</div> -->
+
+	<!-- CONTAINERS -->
+	<div class="container">
+		<div class="character-bank play">
+
+			<div class="unit-container">
+				<img class="unit-image" src="assets/images/0.jpg"/>
+				<div class="unit-stats-container">
+					<div class="unit-health"><p>50</p></div>
+				</div>
+				<div class="unit-name">Jar Jar</div>
+			</div>
+
+			<div class="unit-container">
+				<img class="unit-image" src="assets/images/0.jpg"/>
+				<div class="unit-stats-container">
+					<div class="unit-health"><p>50</p></div>
+				</div>
+				<div class="unit-name">Jar Jar</div>
+			</div>
+
+		</div>
+		<div class="current-player">
+		</div>
+		<div class="current-enemy">
+		</div>
+		<div class="enemy-bank"></div>
+	</div>
+
+</body>
+</html>

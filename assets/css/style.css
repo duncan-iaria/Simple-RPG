@@ -6,24 +6,42 @@
 	width: 800px;
 	height: 400px;
 	margin: 0 auto;
-	background-color: red;
+	/*background-color: red;*/
 }
 
-.character-bank, .current-player, .current-enemy
+.unit-column
 {
 	float: left;
 	width: 138px;
 	height: 100%;
+	margin-left: 10px;
 }
 
-.character-bank
+#character-bank
 {
-	background-color: yellow;
+	background-color: blue;
 }
 
-.current-player
+#current-player
 {
-	background-color: orange;
+	background-color: green;
+}
+
+#current-enemy
+{
+	background-color: red;
+}
+
+#enemy-bank
+{
+ 	background-color: orange;
+}
+
+#attack-button
+{
+	width: 300px;
+	margin: 0 auto;
+	clear: both;
 }
 
 .unit-container

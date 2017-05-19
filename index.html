@@ -49,7 +49,7 @@
 
 	<!-- CONTAINERS -->
 	<div class="container">
-		<div class="character-bank play">
+		<div id="character-bank" class="unit-column">
 
 			<div class="unit-container">
 				<img class="unit-image" src="assets/images/0.jpg"/>
@@ -60,7 +60,7 @@
 			</div>
 
 			<div class="unit-container">
-				<img class="unit-image" src="assets/images/0.jpg"/>
+				<img class="unit-image" src="assets/images/1.jpg"/>
 				<div class="unit-stats-container">
 					<div class="unit-health"><p>50</p></div>
 				</div>
@@ -68,11 +68,12 @@
 			</div>
 
 		</div>
-		<div class="current-player">
+		<div id="current-player" class="unit-column">
 		</div>
-		<div class="current-enemy">
+		<div id="current-enemy" class="unit-column">
 		</div>
-		<div class="enemy-bank"></div>
+		<div id="enemy-bank" class="unit-column"></div>
+		<button id="attack-button">Attack</button>
 	</div>
 
 </body>

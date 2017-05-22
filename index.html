@@ -5,13 +5,16 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style-modal.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<!-- JQUERY LINK -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<!-- <script type="text/javascript" src="assets/js/jquery-3.2.1.slim.min.js"></script> -->
 	<script type="text/javascript" src="assets/js/data.js"></script>
 	<script type="text/javascript" src="assets/js/modal.js"></script>
-	<script type="text/javascript" src="assets/js/game.js"></script>
+	
 </head>
 <body>
 	<!-- MODAL -->
-	<section id="modal-bg-id" class="modal-bg">
+<!-- 	<section id="modal-bg-id" class="modal-bg">
 		<div id="modal-id" class="modal">
 			<div class="modal-label-container">
 				<h1 id="modal-label">Ready to Play?</h1>
@@ -28,30 +31,14 @@
 			<button id="modal-no" class="modal-btn btn-no">Scared</button>
 			<button id="modal-yes" class="modal-btn btn-yes">Ready</button>
 		</div>
-	</section>
+	</section> -->
 	<!-- END MODAL -->
-
-<!-- 	<div class="unit-container">
-		<img class="unit-image" src="assets/images/0.jpg"/>
-		<div class="unit-stats-container">
-			<div class="unit-health"><p>50</p></div>
-		</div>
-		<div class="unit-name">Jar Jar</div>
-	</div>
-
-	<div class="unit-container">
-		<img class="unit-image" src="assets/images/1.jpg"/>
-		<div class="unit-stats-container">
-			<div class="unit-health"><p>100</p></div>
-		</div>
-		<div class="unit-name">Greedo</div>
-	</div> -->
 
 	<!-- CONTAINERS -->
 	<div class="container">
 		<div id="character-bank" class="unit-column">
 
-			<div class="unit-container">
+<!-- 			<div id="pawn0" class="unit-container">
 				<img class="unit-image" src="assets/images/0.jpg"/>
 				<div class="unit-stats-container">
 					<div class="unit-health"><p>50</p></div>
@@ -59,22 +46,28 @@
 				<div class="unit-name">Jar Jar</div>
 			</div>
 
-			<div class="unit-container">
+			<div id="pawn1" class="unit-container">
 				<img class="unit-image" src="assets/images/1.jpg"/>
 				<div class="unit-stats-container">
 					<div class="unit-health"><p>50</p></div>
 				</div>
 				<div class="unit-name">Jar Jar</div>
-			</div>
-
+			</div> -->
 		</div>
+
 		<div id="current-player" class="unit-column">
 		</div>
+
 		<div id="current-enemy" class="unit-column">
 		</div>
-		<div id="enemy-bank" class="unit-column"></div>
-		<button id="attack-button">Attack</button>
-	</div>
 
+		<div id="enemy-bank" class="unit-column">
+		</div>
+
+		<div class="feedback-area">
+			<button id="attack-button">Attack</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="assets/js/game.js"></script>
 </body>
 </html>

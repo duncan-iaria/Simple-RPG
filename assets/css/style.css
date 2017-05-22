@@ -4,11 +4,12 @@
 .container
 {
 	width: 800px;
-	height: 400px;
+	height: 500px;
 	margin: 0 auto;
 	/*background-color: red;*/
 }
 
+/*PLAY AREA*/
 .unit-column
 {
 	float: left;
@@ -40,14 +41,24 @@
 #attack-button
 {
 	width: 300px;
-	margin: 0 auto;
-	clear: both;
+    align-items: center;
+	margin: 10px auto;
 }
 
+.feedback-area
+{
+	clear: both;
+	width: 100%;
+	background-color: yellow;
+}
+
+
+/*UNITS*/
 .unit-container
 {
 	position: relative;
 	display: inline-block;
+	margin: 10px auto;
 
 	font-weight: bold;
 

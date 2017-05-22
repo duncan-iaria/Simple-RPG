@@ -4,7 +4,7 @@
 $( window ).on( 'load', function()
 {
 	//setup game
-	rpgGame.init( data );
+	rpgGame.init();
 	rpgGame.setViews( $( '#character-bank' ), $( '#current-player' ), $( '#current-enemy' ), $( '#enemy-bank' ) );
 
 	//attatch the battle button
@@ -32,15 +32,18 @@ var rpgGame =
 	currentOpponentView: null,
 	enemyBankView: null,
 
-	init: function( tData )
-	{	
-		//save a reference to the character bank for spawn purposes
-		tempSpawnArea = $( "#character-bank" );
+	//game data
+	currentPawns: null,
 
+	init: function()
+	{	
+		this.reset();
+
+		var tempSpawnArea = $( '#character-bank' );
 		//spawn each of the pawns (for selection purpose)
-		$.each( tData.pawns, function( tIndex, tValue )
+		$.each( data.pawns, function( tIndex, tValue )
 		{	
-			tData.pawns[ tIndex ].spawn( tempSpawnArea );
+			data.pawns[ tIndex ].spawn( tempSpawnArea );
 		});
 
 		//attach events
@@ -48,6 +51,22 @@ var rpgGame =
 		{
 			rpgGame.onPawnClicked( this );
 		});
+
+		//get a copy of the base game pawns (so that this list can be managed and checked separetly)
+		this.currentPawns = data.pawns.slice( 0 );
+	},
+
+	//reset all gamne variables back to their starting values
+	reset: function()
+	{
+		this.currentState = stateEnum.PLAYERSELECT;
+		this.currentPlayer = null;
+		this.currentOpponent = null;
+	
+		if( this.currenPawns != null && this.currentPawns.length > 0 )
+		{
+			this.currentPawns.length = 0;
+		}
 	},
 
 	setViews: function( tCharacterBankView, tCurrentPlayerView, tCurrentOpponentView, tEnemyBankView )
@@ -78,42 +97,63 @@ var rpgGame =
 	setCurrentPlayer: function( tPawn )
 	{
 		//set the game's current player to the one from the data
-		this.currentPlayer = data.pawns[ $( tPawn ).attr( "data-id" ) ];
+		var tempDataIndex = parseInt( $( tPawn ).attr( "data-id" ), 10 );
+
+		console.log( tempDataIndex );
+
+		this.currentPlayer = data.pawns[ tempDataIndex ];
 		this.currentState = stateEnum.OPPONENTSELECT;
 
 		//move all the pawns to the appropriate places
 		this.enemyBankView.append( $( '.unit-container' ) );
 
 		//move the selected one back (TODO: refactor this out?) 
-		this.currentPlayerView.append( $( `#pawn${this.currentPlayer.id}` ) );
+		this.currentPlayerView.append( $( `#pawn${tempDataIndex}` ) );
 
 		this.removeCharacterFromPawnList( this.currentPlayer );
 	},
 
 	setCurrentOpponent: function( tPawn )
 	{
-		this.currentOpponent = data.pawns[ $(tPawn).attr( "data-id" ) ];
+		//this data index is from the base data - so it should link with the master list (not the current list)
+		//because the current list indexes will shift as they get removed
+
+		var tempDataIndex = parseInt( $( tPawn ).attr( "data-id" ), 10 );
+
+
+		//if it's the same pawn as the player, don't allow it to be moved
+		if( tempDataIndex == this.currentPlayer.id )
+		{
+			return;
+		}
+
+		this.currentOpponent = data.pawns[ tempDataIndex ];
+
 		this.currentState = stateEnum.BATTLE;
 
 		//move the selected enemy into the battle zone
-		this.currentOpponentView.append( $( `#pawn${this.currentOpponent.id}` ) );
+		this.currentOpponentView.append( $( `#pawn${tempDataIndex}` ) );
 	},
 
 	// BATTLE
 	battle: function()
 	{
 		//if we're in battle mode - then fight!
-		console.log( this.currentState );
-
-		if( this.currentState == stateEnum.BATTLE )
+		if( this.currentState == stateEnum.BATTLE && this.currentPlayer != undefined && this.currentOpponent != undefined )
 		{
-			console.log( "we battlin now" );
 			this.currentOpponent.takeDamage( this.currentPlayer.currentAttackPower );
+			this.currentPlayer.attack()
 
 			//enemy is still alive
 			if( this.currentOpponent.health > 0 )
 			{
 				this.currentPlayer.takeDamage( this.currentOpponent.counterAttackPower );
+
+				//if the current player's health is less than or 0, you lost ( and he died )
+				if( this.currentPlayer.health <= 0 )
+				{
+					this.onLose();
+				}
 
 			}
 			//enemy is dead
@@ -121,25 +161,45 @@ var rpgGame =
 			{
 				//remove the current enemy and set game back to enemy select
 				this.currentOpponentView.empty();
-				removeCharacterFromPawnList( this.currentOpponent );
 
-				//remove the pawn from the game list
-				//this.currentState = O
+				//remove the current pawn from the pawn list
+				this.removeCharacterFromPawnList( this.currentOpponent );
+
+				//if there are still pawns in the current pawn list, select a new opponent
+				if( this.currentPawns.length > 0 )
+				{
+					this.currentState = stateEnum.OPPONENTSELECT;
+				}
+				else
+				{
+					this.onWin();
+				}
 			}
 		}
-
-		console.log( "battle!" );
 	},
 
 	removeCharacterFromPawnList: function( tPawn )
 	{
-		var tempIndex = data.pawns.indexOf( tPawn );
+		var tempIndex = this.currentPawns.indexOf( tPawn );
 
 		if( tempIndex > - 1 )
 		{
-			data.pawns.splice( tempIndex, 1 );
-			console.log( data.pawns );
+			this.currentPawns.splice( tempIndex, 1 );
 		}
+	},
+
+	onWin: function()
+	{
+		alert( "you win!" );
+		this.clearPawns();
+		this.init();
+	},
+
+	onLose: function()
+	{
+		alert( "you lose!" );
+		this.clearPawns();
+		this.init();
 	},
 
 	//remove all the characters from the board

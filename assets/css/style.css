@@ -16,9 +16,10 @@
 	width: 138px;
 	height: 100%;
 	margin-left: 10px;
+	text-align: center;
 }
 
-#character-bank
+/*#character-bank
 {
 	background-color: blue;
 }
@@ -36,7 +37,7 @@
 #enemy-bank
 {
  	background-color: orange;
-}
+}*/
 
 #attack-button
 {
@@ -47,6 +48,7 @@
 
 .feedback-area
 {
+	text-align: center;
 	clear: both;
 	width: 100%;
 	background-color: yellow;

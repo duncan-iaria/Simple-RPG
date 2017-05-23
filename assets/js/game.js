@@ -5,7 +5,7 @@ $( window ).on( 'load', function()
 {
 	//setup game
 	rpgGame.init();
-	rpgGame.setViews( $( '#character-bank' ), $( '#current-player' ), $( '#current-enemy' ), $( '#enemy-bank' ) );
+	rpgGame.setViews( $( '#character-bank' ), $( '#current-player' ), $( '#current-enemy' ), $( '#enemy-bank' ), $( '#feedback-message' ) );
 
 	//attatch the battle button
 	$( '#attack-button' ).on( 'click', rpgGame.battle.bind( rpgGame ) );
@@ -31,12 +31,14 @@ var rpgGame =
 	currentPlayerView: null,
 	currentOpponentView: null,
 	enemyBankView: null,
+	feedbackMessageView: null,
 
 	//game data
 	currentPawns: null,
 
 	init: function()
 	{	
+		//resets the game and views
 		this.reset();
 
 		var tempSpawnArea = $( '#character-bank' );
@@ -69,12 +71,13 @@ var rpgGame =
 		}
 	},
 
-	setViews: function( tCharacterBankView, tCurrentPlayerView, tCurrentOpponentView, tEnemyBankView )
+	setViews: function( tCharacterBankView, tCurrentPlayerView, tCurrentOpponentView, tEnemyBankView, tFeedbackMessageView )
 	{
 		this.characterBankView = tCharacterBankView;
 		this.currentPlayerView = tCurrentPlayerView;
 		this.currentOpponentView = tCurrentOpponentView;
 		this.enemyBankView = tEnemyBankView;
+		this.feedbackMessageView = tFeedbackMessageView;
 	},
 
 	onPawnClicked: function( tPawn )
@@ -99,8 +102,6 @@ var rpgGame =
 		//set the game's current player to the one from the data
 		var tempDataIndex = parseInt( $( tPawn ).attr( "data-id" ), 10 );
 
-		console.log( tempDataIndex );
-
 		this.currentPlayer = data.pawns[ tempDataIndex ];
 		this.currentState = stateEnum.OPPONENTSELECT;
 
@@ -111,6 +112,8 @@ var rpgGame =
 		this.currentPlayerView.append( $( `#pawn${tempDataIndex}` ) );
 
 		this.removeCharacterFromPawnList( this.currentPlayer );
+
+		this.feedbackMessageView.html(  '<h1>Select Your Opponent</h1>' );
 	},
 
 	setCurrentOpponent: function( tPawn )
@@ -133,6 +136,8 @@ var rpgGame =
 
 		//move the selected enemy into the battle zone
 		this.currentOpponentView.append( $( `#pawn${tempDataIndex}` ) );
+
+		this.feedbackMessageView.html(  '<h1>ATTACK!</h1>' );
 	},
 
 	// BATTLE
@@ -141,20 +146,27 @@ var rpgGame =
 		//if we're in battle mode - then fight!
 		if( this.currentState == stateEnum.BATTLE && this.currentPlayer != undefined && this.currentOpponent != undefined )
 		{
+			//damage the opponent
 			this.currentOpponent.takeDamage( this.currentPlayer.currentAttackPower );
-			this.currentPlayer.attack()
+
+			//show attack message
+			this.feedbackMessageView.prepend( `<h1>${this.currentPlayer.name} did ${this.currentPlayer.currentAttackPower} damage to ${this.currentOpponent.name}!</h1>` ); 
+
+			//increment player power
+			this.currentPlayer.attack();
 
 			//enemy is still alive
-			if( this.currentOpponent.health > 0 )
+			if( this.currentOpponent.currentHealth > 0 )
 			{
 				this.currentPlayer.takeDamage( this.currentOpponent.counterAttackPower );
 
+				this.feedbackMessageView.prepend( `<h1>${this.currentOpponent.name} countered for ${this.currentOpponent.counterAttackPower} damage to ${this.currentPlayer.name}!</h1>` ); 
 				//if the current player's health is less than or 0, you lost ( and he died )
-				if( this.currentPlayer.health <= 0 )
+				if( this.currentPlayer.currentHealth <= 0 )
 				{
+					this.feedbackMessageView.prepend( `<h1>${this.currentPlayer.name} is now dead!` ); 
 					this.onLose();
 				}
-
 			}
 			//enemy is dead
 			else
@@ -190,16 +202,20 @@ var rpgGame =
 
 	onWin: function()
 	{
-		alert( "you win!" );
+		var rightBtnActions = [ this.init.bind( this ), modal.closeModal.bind( modal, 1000 ) ];
+
+		modal.openModal( $('body') , "YON WON!", "The Force is strong with you.", null, rightBtnActions, null, 0 );
+
 		this.clearPawns();
-		this.init();
 	},
 
 	onLose: function()
 	{
-		alert( "you lose!" );
+		var rightBtnActions = [ this.init.bind( this ), modal.closeModal.bind( modal, 1000 ) ];
+
+		modal.openModal( $('body') , "YON LOST!", "Mesa love Jar Jar Binks!", null, rightBtnActions, null, 0 );
+		
 		this.clearPawns();
-		this.init();
 	},
 
 	//remove all the characters from the board
@@ -209,5 +225,6 @@ var rpgGame =
 		this.currentPlayerView.empty();
 		this.currentOpponentView.empty();
 		this.enemyBankView.empty();
+		this.feedbackMessageView.empty();
 	},
 };

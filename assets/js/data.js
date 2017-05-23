@@ -7,18 +7,19 @@ function Pawn( tId, tName, tHealth, tBaseAttackPower, tCounterAttackPower )
 	//assigned by parameters passed in
     this.id = tId;
     this.name = tName;
-    this.health = tHealth;
+    this.maxHealth = tHealth;
     this.baseAttackPower = tBaseAttackPower;
     this.counterAttackPower = tCounterAttackPower;
 
     //current attack power starts as the base
     this.currentAttackPower = this.baseAttackPower;
+    this.currentHealth = this.maxHealth;
 
     this.view = 
 	`<div id="pawn${this.id}" class="unit-container">
 		<img class="unit-image" src="assets/images/${this.id}.jpg"/>
 		<div class="unit-stats-container">
-			<div id="health${this.id}" class="unit-health"><p>${this.health}</p></div>
+			<div id="health${this.id}" class="unit-health"><p>${this.currentHealth}</p></div>
 		</div>
 		<div class="unit-name">${this.name}</div>
 	</div>`
@@ -30,16 +31,14 @@ function Pawn( tId, tName, tHealth, tBaseAttackPower, tCounterAttackPower )
 
     	//add a data attribute to this pawns html
     	$( `#pawn${this.id}` ).attr( 'data-id', this.id );
-    },
 
-    this.onSelected = function()
-    {
-    	console.log( "hello I'm " + this.name + ", nice to mee you!" );
+        //make sure the attack power is the base value
+        this.reset();
     },
 
     this.takeDamage = function( tAmt )
     {
-        this.health -= tAmt;
+        this.currentHealth -= tAmt;
         this.updateHealthView();
     },
 
@@ -49,29 +48,17 @@ function Pawn( tId, tName, tHealth, tBaseAttackPower, tCounterAttackPower )
         this.currentAttackPower += this.baseAttackPower;
     },
 
-    this.onAttacked = function( tDamage )
-    {
-    	this.health -= tDamage;
-
-    	if( this.health > 0 )
-		{
-			//this.onCounterAttactk()
-		}
-        else
-        {
-            this.onDeath();
-        }
-    },
-
     //update the health value of this pawn
     this.updateHealthView = function()
     {
-        $( `#health${this.id}` ).text( this.health.toString() );
+        $( `#health${this.id}` ).text( this.currentHealth.toString() );
     },
 
-    this.onDeath = function()
+    //return to base attack power after round
+    this.reset = function()
     {
-
+        this.currentAttackPower = this.baseAttackPower;
+        this.currentHealth = this.maxHealth;
     }
 };
 
@@ -80,13 +67,14 @@ var data =
 {
 	pawns: [],
 
-	jarJar: new Pawn( 0, "Jar Jar", 100, 20, 50 ),
+	jarJar: new Pawn( 0, "Jar Jar", 100, 20, 30 ),
 	greedo: new Pawn( 1, "Greedo", 50, 10, 10 ),
 	hanSolo: new Pawn( 2, "Han Solo", 75, 15, 15 ),
+    maceWindu: new Pawn( 3, "Mace Windu", 120, 20, 5 ),
 
 	init: function()
 	{
-		this.pawns = [ this.jarJar, this.greedo, this.hanSolo ];
+		this.pawns = [ this.jarJar, this.greedo, this.hanSolo, this.maceWindu ];
 	}
 }
 

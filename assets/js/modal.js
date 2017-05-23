@@ -7,20 +7,20 @@
 // START
 //================================
 //initialize the modal
-window.addEventListener( "load", function()
-{
-	//pass in all the html elements (that need to be controlled/updated)
-	modal.init
-	(
-		document.querySelector( "#modal-yes" ),
-		document.querySelector( "#modal-no" ),
-		document.querySelector( "#modal-bg-id" ),
-		document.querySelector( "#modal-id" ),
-		document.querySelector( "#modal-label" ),
-		document.querySelector( "#modal-text" ),
-		document.querySelector( "#modal-img" )
-	);
-});
+// window.addEventListener( "load", function()
+// {
+// 	//pass in all the html elements (that need to be controlled/updated)
+// 	modal.init
+// 	(
+// 		document.querySelector( "#modal-yes" ),
+// 		document.querySelector( "#modal-no" ),
+// 		document.querySelector( "#modal-bg-id" ),
+// 		document.querySelector( "#modal-id" ),
+// 		document.querySelector( "#modal-label" ),
+// 		document.querySelector( "#modal-text" ),
+// 		document.querySelector( "#modal-img" )
+// 	);
+// });
 
 var modal = 
 {
@@ -34,6 +34,27 @@ var modal =
 	modalLabel: null,
 	modalText: null,
 	modalImg: null,
+
+	//view
+	modalView: 
+	`<section id="modal-bg-id" class="modal-bg">
+		<div id="modal-id" class="modal">
+			<div class="modal-label-container">
+				<h1 id="modal-label">Ready to Play?</h1>
+				<hr/>
+			</div>
+
+			<div class="modal-img-container">
+				<img id="modal-img" src="assets/images/0.jpg"/>
+			</div>
+
+			<div class="modal-text-container">
+				<p id="modal-text">Press any key to guess a letter</p>
+			</div>
+			<button id="modal-no" class="modal-btn btn-no">Scared</button>
+			<button id="modal-yes" class="modal-btn btn-yes">Ready</button>
+		</div>
+	</section>`,
 
 	//methods
 	init: function( tRightButton, tLeftButton, tModalBg, tModal, tModalLabel, tModalText, tModalImg )
@@ -55,10 +76,27 @@ var modal =
 	},
 
 	//opens the modal with the passed parameters
-	openModal: function( tLabelMessage, tMessage, tImage, tRightBtnActionsArr, tLeftBtnActionsArr, tTransitionTime )
+	openModal: function( tTarget, tLabelMessage, tMessage, tImage, tRightBtnActionsArr, tLeftBtnActionsArr, tTransitionTime )
 	{
 		//sets the transition to match the tTransitionTime parameter
 		//this is essential so that the modal appears when the bg transition is over
+
+		//a jquery thing - place it
+		tTarget.prepend( this.modalView );
+
+		//grab the elements
+		this.init
+		(
+			document.querySelector( "#modal-yes" ),
+			document.querySelector( "#modal-no" ),
+			document.querySelector( "#modal-bg-id" ),
+			document.querySelector( "#modal-id" ),
+			document.querySelector( "#modal-label" ),
+			document.querySelector( "#modal-text" ),
+			document.querySelector( "#modal-img" ) 
+		);
+
+
 		this.modalBg.style.transition = `all ${tTransitionTime/1000}s`;
 		this.modalBg.style.opacity = 1;
 
@@ -145,8 +183,6 @@ var modal =
 		//remove the event listeners (so new ones can be assigned)
 		this.detatchEvents( this.leftButton, "click", this.closeModal );
 		this.detatchEvents( this.rightButton, "click", this.closeModal );
-		this.detatchEvents( this.rightButton, "click", hangMan.init );
-		this.detatchEvents( this.rightButton, "click", hangMan.updatePokeBankView );
 
 		//this sets the css transition duration ( /1000 so convert from ms to secs )
 		this.modalBg.style.transition = `all ${tTransitionTime / 1000}s`;
@@ -156,5 +192,12 @@ var modal =
 
 		//start background fadeout
 		this.modalBg.style.opacity = 0;
+
+		setTimeout( this.removeModal.bind(this), tTransitionTime );
+	},
+
+	removeModal: function()
+	{
+		$( '#modal-bg-id' ).remove();
 	}
 }
